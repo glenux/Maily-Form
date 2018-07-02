@@ -1,5 +1,4 @@
 const express = require('express');
-const auth = require('http-auth');
 const formidable = require('formidable');
 const nodemailer = require('nodemailer');
 const markdown = require('nodemailer-markdown').markdown;
@@ -7,6 +6,9 @@ const marked = require('marked');
 const sqlite = require('sqlite3').verbose();
 const cors = require('cors');
 
+var rootRouter = require('./routes/root');
+var formsRouter = require('./routes/forms');
+var adminRouter = require('./routes/admin');
 
 // Create DB if it doesn't exist
 createDB();
@@ -16,29 +18,13 @@ const app = express();
 app.set('view engine', 'pug');
 app.use(cors({origin: process.env.ACCESS_CONTROL_ALLOW_ORIGIN }));
 app.use(express.static('public'));
-app.get('/', (req, res) => {
-    return showServiceRunning(res);
-});
+
+app.use('/', rootRouter);
+app.use('/', formsRouter);
 if (process.env.ADMIN_USERNAME && process.env.ADMIN_PASSWORD) {
-    const basic = auth.basic({
-        realm: "Maily-Form Administration"
-    }, (username, password, callback) => {
-        callback(username === process.env.ADMIN_USERNAME && password === process.env.ADMIN_PASSWORD);
-    });
-    app.get('/admin', auth.connect(basic), (req, res) => {
-        return showAdminUI(1, res);
-    });
-    app.get('/admin/spam', auth.connect(basic), (req, res) => {
-        return showAdminUI(2, res);
-    });
-    app.delete('/admin/:id', auth.connect(basic), (req, res) => {
-        deleteSubmissionFromDB(req.params.id);
-        return returnResult(res);
-    });
+	app.use('/admin', adminRouter);
 }
-app.post('/', (req, res) => {
-    return processFormFields(req, res);
-});
+
 const listener = app.listen(process.env.PORT || 8080, () => {
     console.log("server listening on ", listener.address().port);
 });
@@ -53,26 +39,6 @@ function returnResult(res) {
     res.json({result: "success"});
 }
 
-// Show admin UI
-function showAdminUI(sent, res) {
-    getSubmissionsFromDB(sent, (err, submissions) => {
-        if (err) res.render('error', {message: err});
-        else {
-            res.render('admin', {
-                message: marked(sent === 2 ? '**Spam submissions** ([All](/admin)):' : '**All submissions** ([Spam](/admin/spam)):'),
-                submissions: submissions.map(submission => {
-                    return {
-                        id: submission.id,
-                        time: new Date(submission.time).toLocaleString(),
-                        formName: submission.formName,
-                        replyTo: submission.replyTo,
-                        text: marked(submission.text).replace(/\n*$/, "")
-                    };
-                })
-            });
-        }
-    });
-}
 
 // Process Form Fields
 function processFormFields(req, res) {
