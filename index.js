@@ -5,6 +5,8 @@ const nodemailer = require('nodemailer');
 const markdown = require('nodemailer-markdown').markdown;
 const marked = require('marked');
 const sqlite = require('sqlite3').verbose();
+const cors = require('cors');
+
 
 // Create DB if it doesn't exist
 createDB();
@@ -12,6 +14,7 @@ createDB();
 // Setup server
 const app = express();
 app.set('view engine', 'pug');
+app.use(cors({origin: process.env.ACCESS_CONTROL_ALLOW_ORIGIN }));
 app.use(express.static('public'));
 app.get('/', (req, res) => {
     return showServiceRunning(res);

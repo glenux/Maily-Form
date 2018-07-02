@@ -17,7 +17,8 @@ This is a self-hosted service you can use to place forms on static sites. It use
 `FROM` (required): The sender, should be like `Forms forms@example.com`  
 `TO` (required): Default recipient  
 `ALLOWED_TO` (optional): All allowed recipients  
-  
+`ACCESS_CONTROL_ALLOW_ORIGIN` (required): The Access-Control-Allow-Origin CORS header
+
 If you want to use the admin panel at `/admin`, you have to set this too:  
 `ADMIN_USERNAME` (optional): Admin username  
 `ADMIN_PASSWORD` (optional): Admin password
@@ -54,4 +55,5 @@ forms:
         - TO=mail@example.com
         - ALLOWED_TO="mail1@example.com,mail2@example.com"
         - FROM="Forms forms@example.com"
+        - ACCESS_CONTROL_ALLOW_ORIGIN="example.com"
 ```
