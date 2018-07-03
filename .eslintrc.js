@@ -34,10 +34,7 @@ module.exports = {
         "brace-style": "off",
         "callback-return": "off",
         "camelcase": "error",
-        "capitalized-comments": [
-            "error",
-            "always"
-        ],
+        "capitalized-comments": "off",
         "class-methods-use-this": "error",
         "comma-dangle": "error",
         "comma-spacing": [
@@ -114,7 +111,7 @@ module.exports = {
         "max-params": "off",
         "max-statements": "error",
         "max-statements-per-line": "error",
-        "multiline-comment-style": "error",
+        "multiline-comment-style": "off",
         "new-cap": "error",
         "new-parens": "error",
         "newline-after-var": "off",
@@ -201,6 +198,7 @@ module.exports = {
         "no-unmodified-loop-condition": "error",
         "no-unneeded-ternary": "error",
         "no-unused-expressions": "error",
+        "no-unused-vars": [ "error", { "argsIgnorePattern": "^_" }],
         "no-use-before-define": "off",
         "no-useless-call": "error",
         "no-useless-computed-key": "error",
@@ -210,7 +208,7 @@ module.exports = {
         "no-useless-return": "error",
         "no-var": "off",
         "no-void": "error",
-        "no-warning-comments": "error",
+        "no-warning-comments": "off",
         "no-whitespace-before-property": "error",
         "no-with": "error",
         "nonblock-statement-body-position": "error",
