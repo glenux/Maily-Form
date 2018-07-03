@@ -27,15 +27,14 @@ describe('Forms API', () => {
             );
         });
 
-        it('returns JSON content', (_done) => {
+        it('returns a success message', (done) => {
             request.post(
                 { url,
                   formData
                 },
-                (_error, _response, _body) => {
-                    assert.fail();
-                    // TODO: test if content is JSON
-                    // done();
+                (_error, _response, body) => {
+                    expect(body).to.include('Thank you for your submission');
+                    done();
                 }
             );
         });
