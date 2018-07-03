@@ -1,5 +1,6 @@
 /*global describe, it, expect */
 
+/*
 var mocha = require('mocha'),
     it = mocha.it,
     describe = mocha.describe;
@@ -7,10 +8,11 @@ var mocha = require('mocha'),
 var chai = require('chai'),
     assert = require('chai').assert,
     expect  = require('chai').expect;
+*/
 
 var request = require('request');
 
-describe('API root', function() {
+describe('Root API', function() {
 	describe('GET /', function() {
 		var url = "http://localhost:8080/";
 
