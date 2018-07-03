@@ -1,34 +1,31 @@
-/*global describe, it, expect */
-
-/*
-var mocha = require('mocha'),
-    it = mocha.it,
-    describe = mocha.describe;
 
 var chai = require('chai'),
-    assert = require('chai').assert,
-    expect  = require('chai').expect;
-*/
+	mocha = require('mocha'),
+    request = require('request');
 
-var request = require('request');
+/* FIX: assert = chai.assert, */
+var expect = chai.expect;
 
-describe('Root API', function() {
-	describe('GET /', function() {
+var describe = mocha.describe,
+	it = mocha.it;
+
+describe('Root API', () => {
+	describe('GET /', () => {
 		var url = "http://localhost:8080/";
 
-		it('returns status 200', function(done) {
-			request(url, function(error, response, body) {
-        		expect(response.statusCode).to.equal(200);
-        		done();
-      		});
+		it('returns HTTP status code 200', (done) => {
+			request(url, (error, response, body) => {
+				expect(response.statusCode).to.equal(200);
+				done();
+			});
 		});
 
 		it('returns HTML content', function(done) {
 			request(url, function(error, response, body) {
-			 	expect(body).to.include('Maily-Form');
-			 	expect(body).to.include('works');
-        		done();
-      		});
+				expect(body).to.include('Maily-Form');
+				expect(body).to.include('works');
+				done();
+			});
 		});
 	});
 });

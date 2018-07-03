@@ -1,9 +1,17 @@
 /*global describe, it, expect */
 
-var request = require('request');
+var chai = require('chai'),
+	mocha = require('mocha'),
+    request = require('request');
 
-describe('Forms API', function() {
-	describe('POST /', function() {
+/* FIX: assert = chai.assert, */
+var expect = chai.expect;
+
+var describe = mocha.describe,
+	it = mocha.it;
+
+describe('Forms API', () => {
+	describe('POST /', () => {
 		var url = "http://localhost:8080/";
 		var formData = {};
 
