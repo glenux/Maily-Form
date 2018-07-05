@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node .",
-    "watch": "nodemon .",
-    "test": "mocha --reporter spec spec/**/*_spec.js"
+    "watch-start": "nodemon .",
+    "test": "mocha --reporter spec spec/**/*_spec.js",
+    "watch-test": "mocha --watch --recursive --reporter spec spec/**/*_spec.js"
   },
   "author": "Jan-Lukas Else <mail@jlelse.de> (https://about.jlelse.de/)",
   "homepage": "https://github.com/jlelse/Maily-Form",
