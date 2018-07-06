@@ -9,9 +9,6 @@ const sqlite = require('sqlite3').verbose();
 const transporter = require('./lib/transporter');
 const config = require('./lib/config');
 
-// Create DB if it doesn't exist
-createDB();
-
 // Setup server
 const app = express();
 app.set('view engine', 'pug');
@@ -28,14 +25,6 @@ const listener = app.listen(config.port, () => {
     console.log("server listening on ", listener.address().port);
 });
 
-function createDB() {
-    let db = new sqlite.Database('data/submissions.db');
-    db.run('CREATE TABLE IF NOT EXISTS submissions (id INTEGER PRIMARY KEY AUTOINCREMENT, time INTEGER, formName TEXT, replyTo TEXT, text TEXT, sent INTEGER)', (err) => {
-        if (err) return console.log(err.message);
-        console.log('Database initialized');
-    });
-    db.close();
-}
 
 
 // Use Markdown
