@@ -1,8 +1,9 @@
 const express = require('express');
 const formidable = require('formidable');
-const sqlite = require('sqlite3').verbose();
 const transporter = require('../lib/transporter');
+const db = require('../lib/database').connect();
 
+/* eslint-disable-next-line new-cap */
 var router = express.Router();
 
 router.post('/', (req, res) => processFormFields(req, res));
@@ -48,12 +49,10 @@ function processFormFields(req, res) {
 }
 
 function addSubmissionToDB(formName, replyTo, text, sent) {
-    let db = new sqlite.Database('data/submissions.db');
     db.run('INSERT INTO submissions VALUES (NULL, ?, ?, ?, ?, ?)', [Date.now(), formName, replyTo, text, sent], (err) => {
         if (err) return console.log(err.message);
         console.log('Entry added to DB');
     });
-    db.close();
 }
 
 // Send mail with text
@@ -64,6 +63,7 @@ function sendMail(markdown, to, replyTo, formName) {
             to = process.env.TO;
         }
     }
+
     // Setup mail
     let mailOptions = {
         from: process.env.FROM,
@@ -73,6 +73,7 @@ function sendMail(markdown, to, replyTo, formName) {
         markdown: `**New submission:**  \n  \n${markdown}`
     };
     console.log('Sending mail: ', mailOptions);
+
     // Send mail
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {

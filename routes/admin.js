@@ -2,7 +2,9 @@
 const auth = require('http-auth');
 const express = require('express');
 const marked = require('marked');
+const db = require('../lib/database').connect();
 
+/* eslint-disable-next-line new-cap */
 var router = express.Router();
 
 const basic = auth.basic({
@@ -41,13 +43,10 @@ function showAdminUI(sent, res) {
 }
 
 function deleteSubmissionFromDB(id) {
-	let sqlite = global.sqlite;
-    let db = new sqlite.Database('data/submissions.db');
     db.run('DELETE FROM submissions WHERE id=(?)', [id], (err) => {
         if (err) console.log(err);
         else console.log('Entry deleted from DB');
     });
-    db.close();
 }
 
 // Return result
@@ -56,8 +55,6 @@ function returnResult(res) {
 }
 
 function getSubmissionsFromDB(sent, callback) {
-	let sqlite = global.sqlite;
-    let db = new sqlite.Database('data/submissions.db');
     let sql = `SELECT * FROM submissions ORDER BY time DESC`;
     if (sent) sql = `SELECT * FROM submissions WHERE sent = ${sent} ORDER BY time DESC`;
     db.all(sql, [], (err, rows) => {
@@ -67,7 +64,6 @@ function getSubmissionsFromDB(sent, callback) {
         }
         else callback(null, rows);
     });
-    db.close();
 }
 
 module.exports = router;
