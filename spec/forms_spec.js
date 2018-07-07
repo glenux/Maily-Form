@@ -29,6 +29,12 @@ describe('Forms API', () => {
         });
 
         it.skip('send email according to _replyTo (when set)', (done) => {
+            // prepare smtp server
+            //  - add handler on email reception
+            //    - compare email reploy-to with defined replyTo
+            // listen
+            //   - make request
+            //   - handle response
             done();
         });
 
