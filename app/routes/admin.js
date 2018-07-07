@@ -2,15 +2,20 @@
 const auth = require('http-auth');
 const express = require('express');
 const marked = require('marked');
+
+const config = require('../lib/config');
 const db = require('../lib/database').connect();
 
 /* eslint-disable-next-line new-cap */
 var router = express.Router();
 
 const basic = auth.basic({
-    realm: "Maily-Form Administration"
+    realm: config.adminRealm
 }, (username, password, callback) => {
-    callback(username === process.env.ADMIN_USERNAME && password === process.env.ADMIN_PASSWORD);
+    let authSuccess =
+        (username === config.adminUsername) &&
+        (password === config.adminPassword);
+    callback(authSuccess);
 });
 
 router.get('/admin', auth.connect(basic), (req, res) => showAdminUI(1, res));

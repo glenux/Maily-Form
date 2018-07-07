@@ -2,6 +2,7 @@ const express = require('express');
 const formidable = require('formidable');
 const transporter = require('../lib/transporter');
 const db = require('../lib/database').connect();
+const config = require('../lib/config');
 
 /* eslint-disable-next-line new-cap */
 var router = express.Router();
@@ -10,13 +11,14 @@ router.post('/', (req, res) => processFormFields(req, res));
 
 // Process Form Fields
 function processFormFields(req, res) {
-    let text = "";
+    let text = '';
     let to = process.env.TO;
     let replyTo;
     let redirectTo;
     let formName;
     let botTest = true;
     let form = new formidable.IncomingForm();
+
     form.on('field', (field, value) => {
         if (field === "_to") to = value;
         else if (field === "_replyTo") replyTo = value;
@@ -27,6 +29,7 @@ function processFormFields(req, res) {
             text += `**${field}**: ${value}  \n`;
         }
     });
+
     form.on('end', () => {
         if (redirectTo) {
             res.writeHead(302, {
@@ -34,7 +37,7 @@ function processFormFields(req, res) {
             })
         }
         else {
-            res.render('success', {message: (process.env.MESSAGE || 'Thank you for your submission.')});
+            res.render('success', { message: config.messageSubject });
         }
         if (botTest) {
             console.log("The submission is probably no spam. Sending mail...");
@@ -49,10 +52,14 @@ function processFormFields(req, res) {
 }
 
 function addSubmissionToDB(formName, replyTo, text, sent) {
-    db.run('INSERT INTO submissions VALUES (NULL, ?, ?, ?, ?, ?)', [Date.now(), formName, replyTo, text, sent], (err) => {
-        if (err) return console.log(err.message);
-        console.log('Entry added to DB');
-    });
+    db.run(
+        'INSERT INTO submissions VALUES (NULL, ?, ?, ?, ?, ?)', 
+        [Date.now(), formName, replyTo, text, sent], 
+        (err) => {
+            if (err) return console.log(err.message);
+            console.log('Entry added to DB');
+        }
+    );
 }
 
 // Send mail with text
