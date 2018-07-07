@@ -5,14 +5,16 @@ const markdown = require('nodemailer-markdown').markdown;
 
 // Setup mailer
 const transporterConfig = {
-    host: config.emailHost,
-    port: config.emailPort,
-    secure: config.emailSecure === "true",
-    auth: (config.emailAuth ? {
-        user: config.emailUser,
-        pass: config.emailPass
-    } : null)
+    host: config.smtpHost,
+    port: config.smtpPort,
+    secure: (config.smtpSsl === "true"),
+    auth: (config.smtpAuth === "true" ? {
+        user: config.smtpUser,
+        pass: config.smtpPass
+    } : false)
 };
+
+console.log(transporterConfig);
 
 const transporter = nodemailer.createTransport(transporterConfig);
 
