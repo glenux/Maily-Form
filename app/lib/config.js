@@ -18,6 +18,10 @@ if (process.env.NODE_ENV === 'production') {
         smtpSsl: process.env.SMTP_SSL || false,
         smtpAuth: process.env.SMTP_AUTH || false,
 
+        // Header content for emails
+        emailFrom: process.env.FROM || 'noreply@example.com',
+        emailTo: process.env.TO || 'noone@example.com',
+
         // Text content for success and error messages
         messageSuccess: process.env.MESSAGE_SUCCESS || 'Thank you for your submission.',
         messageError: process.env.MESSAGE_ERROR || 'Unable to forward your submission',
@@ -52,6 +56,10 @@ if (process.env.NODE_ENV === 'production') {
         smtpPass: null,
         smtpSsl: false,
         smtpAuth: false,
+
+        // Header content for emails
+        emailFrom: 'noreply@example.com',
+        emailTo: 'noone@example.com',
 
         // Text content for success and error messages
         messageSuccess: 'Thank you for your submission.',

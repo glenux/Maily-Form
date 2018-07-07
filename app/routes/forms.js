@@ -12,7 +12,7 @@ router.post('/', (req, res) => processFormFields(req, res));
 // Process Form Fields
 function processFormFields(req, res) {
     let text = '';
-    let to = process.env.TO;
+    let to = config.emailTo;
     let replyTo;
     let redirectTo;
     let formName;
@@ -64,18 +64,19 @@ function addSubmissionToDB(formName, replyTo, text, sent) {
 
 // Send mail with text
 function sendMail(markdown, to, replyTo, formName) {
-    if (process.env.ALLOWED_TO) {
-        if (!process.env.ALLOWED_TO.includes(to)) {
-            console.log("Tried to send to %s, but that isn't allowed. Sending to %s instead.", to, process.env.TO);
-            to = process.env.TO;
+    if (config.allowedTo) {
+        let allowedToArray = config.allowedTo.split(/\s+/);
+        if (!allowedToArray.includes(to)) {
+            console.log("Tried to send to %s, but that isn't allowed. Sending to %s instead.", to, config.emailTo);
+            to = config.emailTo;
         }
     }
 
     // Setup mail
     let mailOptions = {
-        from: process.env.FROM,
-        to: to || process.env.TO,
-        replyTo: replyTo || process.env.FROM,
+        from: config.emailFrom,
+        to: to || config.emailTo,
+        replyTo: replyTo || config.emailFrom,
         subject: `New submission${formName ? ` on ${formName}` : ''}`,
         markdown: `**New submission:**  \n  \n${markdown}`
     };
