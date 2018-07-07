@@ -1,6 +1,7 @@
 
 const nodemailer = require('nodemailer');
 const config = require('./config');
+const markdown = require('nodemailer-markdown').markdown;
 
 // Setup nodemailer
 const transporter = nodemailer.createTransport({
@@ -12,5 +13,8 @@ const transporter = nodemailer.createTransport({
         pass: config.emailPass
     }
 });
+
+// Use Markdown
+transporter.use('compile', markdown());
 
 module.exports = transporter;
