@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node .",
-    "watch": "eval \"$(sed 's/^/export /' env.test)\" && nodemon .",
-    "spec": "mocha --reporter spec spec/**/*_spec.js",
-    "watch-spec": "mocha --watch --recursive --reporter spec spec/**/*_spec.js"
+    "watch": "NODE_ENV=test && nodemon .",
+    "spec": "NODE_ENV=test mocha --reporter spec spec/**/*_spec.js",
+    "watch-spec": "NODE_ENV=test mocha --watch --recursive --reporter spec spec/**/*_spec.js"
   },
   "author": "Jan-Lukas Else <mail@jlelse.de> (https://about.jlelse.de/)",
   "homepage": "https://github.com/jlelse/Maily-Form",
