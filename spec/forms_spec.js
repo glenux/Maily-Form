@@ -1,13 +1,16 @@
 
-var chai = require('chai'),
-    mocha = require('mocha'),
-    request = require('request');
+const chai = require('chai');
+const mocha = require('mocha');
+const request = require('request');
 
-var assert = chai.assert,
-    expect = chai.expect;
+const assert = chai.assert;
+// const expect = chai.expect;
 
-var describe = mocha.describe,
-    it = mocha.it;
+const describe = mocha.describe;
+const it = mocha.it;
+
+const config = require('../app/lib/config');
+const SMTPServer = require('smtp-server').SMTPServer;
 
 describe('Forms API', () => {
     describe('POST /', () => {
@@ -22,20 +25,42 @@ describe('Forms API', () => {
             request.post(
                 { url, formData },
                 (error, response, _body) => {
-                    expect(response.statusCode).to.equal(200);
+                    assert.strictEqual(response.statusCode, 200);
                     done();
                 }
             );
         });
 
-        it.skip('send email according to _replyTo (when set)', (done) => {
+        it('send email according to _replyTo (when set)', (done) => {
             // prepare smtp server
             //  - add handler on email reception
-            //    - compare email reploy-to with defined replyTo
+            const server = new SMTPServer({
+            	secure: false,
+                onMailFrom(address, session, callback) {
+                    console.log("TAMERE");
+                    console.log(address);
+                    // assert.strictEqual(address, 'Success');
+                    done();
+
+                    return callback();
+                }
+            });
+
             // listen
-            //   - make request
-            //   - handle response
-            done();
+            console.log('SMTP port = %s', config.smtpPort);
+            server.listen(config.smtpPort, () => {
+                //   - make request
+                request.post(
+                    { url, formData },
+                    (_error, _response, _body) => {
+                        // FIXME
+                        console.log('Received API response');
+                        console.log(_error);
+                        setTimeout( () => server.close(), 2000);
+                    }
+                 );
+                //   - handle response
+            });
         });
 
         it.skip('redirects according to _redirectTo (when set)', (done) => {
@@ -54,7 +79,7 @@ describe('Forms API', () => {
             request.post(
                 { url, formData },
                 (_error, _response, body) => {
-                    expect(body).to.include('Success');
+                    assert.include(body, 'Success');
                     done();
                 }
             );
