@@ -9,19 +9,19 @@ const assert = chai.assert;
 const describe = mocha.describe;
 const it = mocha.it;
 
-const config = require('../app/lib/config');
-const SMTPServer = require('smtp-server').SMTPServer;
+const withSmtpServer = require('./lib/with_smtp_server');
 
 describe('Forms API', () => {
     describe('POST /', () => {
-        var url = "http://localhost:8080/";
-        var formData = {};
+        let url = "http://localhost:8080/";
 
         /*
          *   Forms API
          */
 
         it('returns HTTP status code 200', (done) => {
+            let formData = {};
+
             request.post(
                 { url, formData },
                 (error, response, _body) => {
@@ -31,35 +31,30 @@ describe('Forms API', () => {
             );
         });
 
-        it('send email according to _replyTo (when set)', (done) => {
-            // prepare smtp server
-            //  - add handler on email reception
-            const server = new SMTPServer({
-            	secure: false,
-                onMailFrom(address, session, callback) {
-                    console.log("TAMERE");
-                    console.log(address);
-                    // assert.strictEqual(address, 'Success');
+        it('set properly the _replyTo header (when set)', (done) => {
+            let formData = {
+                "_replyTo": 'loveIsAll@example.com'
+            };
+
+            withSmtpServer({
+                onMessage: (mailObject) => {
+                    assert.strictEqual(
+                        mailObject.headers['reply-to'],
+                        /* eslint-disable-next-line no-underscore-dangle */
+                        formData._replyTo
+                    );
                     done();
+                },
 
-                    return callback();
+                onListen: (server) => {
+                    request.post(
+                        { url, formData },
+                        (_error, _response, _body) => {
+                            // Force close after 2secs
+                            setTimeout(() => server.close(), 2000);
+                        }
+                    );
                 }
-            });
-
-            // listen
-            console.log('SMTP port = %s', config.smtpPort);
-            server.listen(config.smtpPort, () => {
-                //   - make request
-                request.post(
-                    { url, formData },
-                    (_error, _response, _body) => {
-                        // FIXME
-                        console.log('Received API response');
-                        console.log(_error);
-                        setTimeout( () => server.close(), 2000);
-                    }
-                 );
-                //   - handle response
             });
         });
 
@@ -67,15 +62,60 @@ describe('Forms API', () => {
             done();
         });
 
-        it.skip('send email with formName in title (when set)', (done) => {
-            done();
+        it('send email with formName in title (when set)', (done) => {
+            let formData = {
+                "_formName": 'loveIsAll'
+            };
+
+            withSmtpServer({
+                onMessage: (mailObject) => {
+                    assert.include(
+                        mailObject.subject,
+                        /* eslint-disable-next-line no-underscore-dangle */
+                        formData._formName
+                    );
+                    done();
+                },
+
+                onListen: (server) => {
+                    request.post(
+                        { url, formData },
+                        (_error, _response, _body) => {
+                            // Force close after 2secs
+                            setTimeout(() => server.close(), 2000);
+                        }
+                    );
+                }
+            });
         });
 
-        it.skip('blocks email when _t_email is not empty', (done) => {
-            done();
+        it('blocks email when _t_email is not empty', (done) => {
+            let formData = {
+                "_t_email": 'iAmABot'
+            };
+
+            let messageCounter = 0;
+            withSmtpServer({
+                onMessage: (_mailObject) => { messageCounter += 1; },
+
+                onListen: (server) => {
+                    request.post(
+                        { url, formData },
+                        (_error, _response, _body) => {
+                            // Force close after 2secs
+                            setTimeout(() => {
+                                assert.strictEqual(messageCounter, 0);
+                                server.close()
+                                done();
+                            }, 500);
+                        }
+                    );
+                }
+            });
         });
 
         it('returns a success message', (done) => {
+            let formData = {};
             request.post(
                 { url, formData },
                 (_error, _response, body) => {
