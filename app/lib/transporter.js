@@ -11,7 +11,10 @@ const transporterConfig = {
     auth: (config.smtpAuth === "true" ? {
         user: config.smtpUser,
         pass: config.smtpPass
-    } : false)
+    } : false),
+    tls: {
+        rejectUnauthorized: (config.smtpSsl === "true")
+    }
 };
 
 console.log(transporterConfig);
