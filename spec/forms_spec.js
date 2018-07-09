@@ -19,72 +19,118 @@ describe('Forms API', () => {
          *   Forms API
          */
 
-        it('returns HTTP status code 200', (done) => {
+        it('sends email and returns HTTP status code 200', (done) => {
             let formData = {};
 
-            request.post(
-                { url, formData },
-                (error, response, _body) => {
-                    assert.strictEqual(response.statusCode, 200);
+            withSmtpServer({
+                onListen: (_server) => {
+                    request.post(
+                        { url, formData },
+                        (error, response, _body) => {
+                            assert.strictEqual(response.statusCode, 200);
+                        }
+                    );
+                },
+
+                onClose: () => {
                     done();
                 }
-            );
+            });
         });
 
-        it('set properly the _replyTo header (when set)', (done) => {
+        it('sends email and set properly the _replyTo header (when set)', (done) => {
             let formData = {
                 "_replyTo": 'loveIsAll@example.com'
             };
+            let messageCounter = 0;
 
             withSmtpServer({
                 onMessage: (mailObject) => {
+                    messageCounter += 1;
                     assert.strictEqual(
                         mailObject.headers['reply-to'],
                         /* eslint-disable-next-line no-underscore-dangle */
                         formData._replyTo
                     );
-                    done();
                 },
 
-                onListen: (server) => {
+                onListen: () => {
                     request.post(
                         { url, formData },
                         (_error, _response, _body) => {
-                            // Force close after 2secs
-                            setTimeout(() => server.close(), 2000);
+                            // do nothing
                         }
                     );
+                },
+
+                onClose: () => {
+                    assert.strictEqual(messageCounter, 1);
+                    done();
                 }
             });
         });
 
-        it.skip('redirects according to _redirectTo (when set)', (done) => {
-            done();
+        it('sends email and redirects according to _redirectTo (when set)', (done) => {
+            let formData = {
+                "_redirectTo": 'https://example.com'
+            };
+            let messageCounter = 0;
+
+            withSmtpServer({
+                onMessage: () => {
+                    messageCounter += 1;
+                },
+
+                onListen: () => {
+                    request.post(
+                        { url, formData },
+                        (_error, response, _body) => {
+                            // Final location must be _redirectTo value
+                            assert.strictEqual(
+                                response.headers.location,
+                                /* eslint-disable-next-line no-underscore-dangle */
+                                formData._redirectTo
+                            );
+                        }
+                    );
+                },
+
+                onClose: () => {
+                    assert.strictEqual(messageCounter, 1);
+                    done();
+                }
+            });
+
         });
 
         it('send email with formName in title (when set)', (done) => {
             let formData = {
                 "_formName": 'loveIsAll'
             };
+            let messageCounter = 0;
 
             withSmtpServer({
                 onMessage: (mailObject) => {
+                    messageCounter += 1;
                     assert.include(
                         mailObject.subject,
                         /* eslint-disable-next-line no-underscore-dangle */
                         formData._formName
                     );
-                    done();
                 },
 
-                onListen: (server) => {
+                onListen: () => {
                     request.post(
                         { url, formData },
                         (_error, _response, _body) => {
-                            // Force close after 2secs
-                            setTimeout(() => server.close(), 2000);
+                            // do nothing
                         }
                     );
+                },
+
+                onClose: () => {
+                    assert.strictEqual(messageCounter, 1);
+                    done();
                 }
             });
         });
@@ -98,18 +144,18 @@ describe('Forms API', () => {
             withSmtpServer({
                 onMessage: (_mailObject) => { messageCounter += 1; },
 
-                onListen: (server) => {
+                onListen: () => {
                     request.post(
                         { url, formData },
                         (_error, _response, _body) => {
-                            // Force close after 2secs
-                            setTimeout(() => {
-                                assert.strictEqual(messageCounter, 0);
-                                server.close()
-                                done();
-                            }, 500);
+                            // do nothing
                         }
                     );
+                },
+
+                onClose: () => {
+                    assert.strictEqual(messageCounter, 0);
+                    done();
                 }
             });
         });
