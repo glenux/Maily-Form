@@ -11,12 +11,14 @@ function withSmtpServer(callbackObj) {
     let server = new SMTPServer({
         secure: false,
         authOptional: true,
+        closeTimeout: 1,
 
         // Handle email reception
         onData(stream, session, callback) {
             mailparser.on('end', (mailObject) => {
-                server.close();
-                callbackObj.onMessage(mailObject);
+                server.close(() => {
+                    callbackObj.onMessage(mailObject);
+                });
             });
             stream.pipe(mailparser);
 
