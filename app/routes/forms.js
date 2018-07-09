@@ -53,8 +53,8 @@ function processFormFields(req, res) {
 
 function addSubmissionToDB(formName, replyTo, text, sent) {
     db.run(
-        'INSERT INTO submissions VALUES (NULL, ?, ?, ?, ?, ?)', 
-        [Date.now(), formName, replyTo, text, sent], 
+        'INSERT INTO submissions VALUES (NULL, ?, ?, ?, ?, ?)',
+        [Date.now(), formName, replyTo, text, sent],
         (err) => {
             if (err) return console.log(err.message);
             console.log('Entry added to DB');
