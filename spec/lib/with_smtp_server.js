@@ -10,14 +10,14 @@ function withSmtpServer(callbackObj) {
 
     let closing = false;
     function onListen () {
-        console.log("DEBUG onListen callback");
+        // console.log("DEBUG onListen callback");
         if (callbackObj.onListen) {
             callbackObj.onListen();
         }
     }
 
     function onMessage (mailObject) {
-        console.log("DEBUG onMessage callback");
+        // console.log("DEBUG onMessage callback");
         if (callbackObj.onMessage) {
             callbackObj.onMessage(mailObject);
         }
@@ -25,7 +25,7 @@ function withSmtpServer(callbackObj) {
 
     function onClose () {
         closing = true;
-        console.log("DEBUG onClose callback");
+        // console.log("DEBUG onClose callback");
         if (callbackObj.onClose) {
             callbackObj.onClose();
         }
@@ -40,9 +40,9 @@ function withSmtpServer(callbackObj) {
 
         // Handle email reception
         onData(stream, session, callback) {
-            console.log("DEBUG mailparser.start");
+            // console.log("DEBUG mailparser.start");
             mailparser.on('end', (mailObject) => {
-                console.log("DEBUG mailparser.end");
+                // console.log("DEBUG mailparser.end");
                 onMessage(mailObject);
                 if (!closing) {
                     server.close(onClose);
@@ -57,9 +57,9 @@ function withSmtpServer(callbackObj) {
 
     // Listen for connections
     server.listen(config.smtpPort, () => {
-        console.log("DEBUG listen start");
+        // console.log("DEBUG listen start");
         setTimeout(() => {
-            console.log("DEBUG listen stop");
+            // console.log("DEBUG listen stop");
             if (!closing) {
                 server.close(onClose)
             }
