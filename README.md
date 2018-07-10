@@ -63,36 +63,38 @@ If you want to use the admin panel at `/admin`, you have to set this too:
 
 You can find a sample in the `form.html` file.
 
-**Notice to the honeypot field:** Maily Form offers the option to use a [Honeypot](https://en.wikipedia.org/wiki/Honeypot_(computing)) field, which is basically another input, but it's hidden to the user with either a CSS rule or some JavaScript. It is very likely, that your public form will get the attention of some bots some day and then the spam starts. But bots try to fill every possible input field and will also fill the honeypot field. But Maily Form is really clever and refuses to send mails where the honeypot field is filled. So you should definitely use it.
+**Notice to the honeypot field:** Maily Form offers the option to use a [Honeypot](https://en.wikipedia.org/wiki/Honeypot\_(computing)) field, which is basically another input, but it's hidden to the user with either a CSS rule or some JavaScript. It is very likely, that your public form will get the attention of some bots some day and then the spam starts. But bots try to fill every possible input field and will also fill the honeypot field. But Maily Form is really clever and refuses to send mails where the honeypot field is filled. So you should definitely use it.
 
 ## Installation
 
 You can simply start a Docker container with the parameters listed above. You can also use `docker-compose`.
 
-Sample part of a compose file for Maily Form:
+Sample `docker-compose.yml` file for Maily Form:
 
 ```
-forms:
-    image: jlelse/maily-form
-    container_name: forms
-    restart: unless-stopped
-    environment:
-        - SMTP_USER=mail@example.com
-        - SMTP_PASS=yourSUPERsecretPASSWORD123
-        - SMTP_HOST=smtp.your-mail-provider.com
-        - SMTP_PORT=587
-        - SMTP_SSL=true
-        - SMTP_AUTH=true
-        - EMAIL_TO=mail@example.com
-        - EMAIL_FROM="Forms forms@example.com"
-        - ALLOWED_TO="mail1@example.com,mail2@example.com"
-        - CORS_HEADER="example.com"
+version: '3'
+services:
+    forms:
+        image: jlelse/maily-form
+        container_name: forms
+        restart: unless-stopped
+        environment:
+            - SMTP_USER=mail@example.com
+            - SMTP_PASS=yourSUPERsecretPASSWORD123
+            - SMTP_HOST=smtp.your-mail-provider.com
+            - SMTP_PORT=587
+            - SMTP_SSL=true
+            - SMTP_AUTH=true
+            - EMAIL_TO=mail@example.com
+            - EMAIL_FROM="Forms forms@example.com"
+            - ALLOWED_TO="mail1@example.com,mail2@example.com"
+            - CORS_HEADER="example.com"
 ```
 
 ## Authors 
 
 * Original source code [jlelse](https://about.jlelse.de) mainly for own purposes.
-* Contributors : [glenux](https://github.com/glenux)
+* Contributors : [glenux](https://glenux.net) to make it ready for production at [boldcode.io](https://boldcode.io)
 
 ## Licence
 
