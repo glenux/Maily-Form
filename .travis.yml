@@ -1,7 +1,16 @@
+cache:
+  directories:
+    - node_modules
+
 language: node_js
 node_js:
   - "node"
   - "10"
   - "9"
   - "8"
-script: npm run spec
+
+jobs:
+  include:
+    - script: npm run watch &
+    - script: sleep 2s
+    - script: npm run spec
