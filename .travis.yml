@@ -9,8 +9,11 @@ node_js:
   - "9"
   - "8"
 
-jobs:
-  include:
-    - script: npm run watch &
-    - script: sleep 2s
-    - script: npm run spec
+env: 
+  - NODE_ENV=test
+
+before_script:
+  - npm run watch &
+  - sleep 2s
+
+script: npm run spec
