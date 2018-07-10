@@ -19,8 +19,8 @@ if (process.env.NODE_ENV === 'production') {
         smtpAuth: process.env.SMTP_AUTH || false,
 
         // Header content for emails
-        emailFrom: process.env.FROM || 'noreply@example.com',
-        emailTo: process.env.TO || 'noone@example.com',
+        emailFrom: process.env.EMAIL_FROM || 'noreply@example.com',
+        emailTo: process.env.EMAIL_TO || 'noone@example.com',
 
         // Text content for success and error messages
         messageSuccess: process.env.MESSAGE_SUCCESS || 'Thank you for your submission.',
@@ -29,14 +29,17 @@ if (process.env.NODE_ENV === 'production') {
         subjectSuccess: process.env.SUBJECT_SUCCESS || 'New submission from __FORM_NAME__',
         subjectError: process.env.SUBJECT_ERROR || 'Error in submission from __FORM_NAME__',
 
+        // Allowed recipients
+        allowedTo: process.env.ALLOWED_TO || false,
+
         // Response format (accepts 'json' or 'html')
         responseFormat: process.env.RESPONSE_FORMAT || 'json',
 
         // Security (or lack-of)
-        accessControlAllowOrigin: process.env.ACCESS_CONTROL_ALLOW_ORIGIN || '*',
+        corsHeader: process.env.CORS_HEADER || '*',
 
         // Server
-        host: process.env.HOST || '0.0.0.0',
+        host: process.env.HOST || '127.0.0.1',
         port: process.env.PORT || 8080
     }
 } else {
@@ -72,7 +75,7 @@ if (process.env.NODE_ENV === 'production') {
         responseFormat: 'json',
 
         // Security (or lack-of)
-        accessControlAllowOrigin: '*',
+        corsHeader: '*',
 
         // Server
         host: '0.0.0.0',
