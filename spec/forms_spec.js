@@ -7,13 +7,26 @@ const assert = chai.assert;
 // const expect = chai.expect;
 
 const describe = mocha.describe;
+const beforeEach = mocha.beforeEach;
+const afterEach = mocha.afterEach;
 const it = mocha.it;
 
 const withSmtpServer = require('./lib/with_smtp_server');
 
+const app = require('../index');
+var server;
+
+beforeEach((done) => {
+    server = app.build(3000, done);
+});
+
+afterEach((done) => {
+    server.close(done);
+});
+
 describe('Forms API', () => {
     describe('POST /', () => {
-        let url = "http://localhost:8080/";
+        let url = "http://localhost:3000/";
 
         /*
          *   Forms API
@@ -27,6 +40,7 @@ describe('Forms API', () => {
                     request.post(
                         { url, formData },
                         (error, response, _body) => {
+                            console.log(error);
                             assert.strictEqual(response.statusCode, 200);
                         }
                     );
