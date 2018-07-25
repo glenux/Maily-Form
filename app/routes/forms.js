@@ -32,13 +32,19 @@ function processFormFields(req, res) {
 
     form.on('end', () => {
         if (redirectTo) {
-            res.writeHead(302, {
-                'location': redirectTo
-            })
+            res.writeHead(302, { 'location': redirectTo });
+        } else {
+            if (config.responseFormat === 'json') {
+                res.set('Content-Type', 'application/json');
+                res.send({ status: 'success' });
+            } else if (config.responseFormat === 'html') {
+                res.set('Content-Type', 'text/html');
+                res.render('success', { message: config.subjectSuccess });
+            } else {
+                // undefined format
+            }
         }
-        else {
-            res.render('success', { message: config.messageSubject });
-        }
+
         if (botTest) {
             console.log("The submission is probably no spam. Sending mail...");
             sendMail(text, to, replyTo, formName);
@@ -47,6 +53,8 @@ function processFormFields(req, res) {
         }
         addSubmissionToDB(formName, replyTo, text, botTest ? 1 : 2);
         res.end();
+
+
     });
     form.parse(req);
 }

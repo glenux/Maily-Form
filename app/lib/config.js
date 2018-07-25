@@ -72,7 +72,7 @@ if (process.env.NODE_ENV === 'production') {
         subjectError: 'Error in submission from __FORM_NAME__',
 
         // Response format (accepts 'json' or 'html')
-        responseFormat: 'json',
+        responseFormat: 'html',
 
         // Security (or lack-of)
         corsHeader: '*',
