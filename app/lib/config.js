@@ -47,7 +47,7 @@ if (process.env.NODE_ENV === 'production') {
     // In test : set hard-coded values
     config = {
         formName: 'anonymous',
-        database: ':memory:',
+        database: 'data/submissions-test.db',
 
         // Admin credentials to access the dashboard
         adminUsername: 'admin',

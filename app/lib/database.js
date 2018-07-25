@@ -1,6 +1,7 @@
 
 const sqlite = require('sqlite3').verbose();
-var db = new sqlite.Database('data/submissions.db');
+const config = require('./config');
+var db = new sqlite.Database(config.database);
 
 function connect() {
     return db;
