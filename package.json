@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node .",
     "watch": "NODE_ENV=test && nodemon .",
-    "spec": "NODE_ENV=test mocha --reporter spec spec/**/*_spec.js",
+    "test": "NODE_ENV=test mocha --reporter spec spec/**/*_spec.js",
     "watch-spec": "NODE_ENV=test mocha --watch --recursive --reporter spec spec/**/*_spec.js"
   },
   "author": "Jan-Lukas Else <mail@jlelse.de> (https://about.jlelse.de/)",
