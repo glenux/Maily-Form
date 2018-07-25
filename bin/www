@@ -1,0 +1,11 @@
+#!/usr/bin/env node
+
+const path = require('path');
+const rootDir = path.join(__dirname, '..');
+const app = require(path.join(rootDir, '/app/server'));
+const config = require(path.join(rootDir, '/app/lib/config'));
+
+var server = app.listen(config.port, config.host, () => {
+	console.log(`Server ready on ${server.address().address}:${server.address().port}`);
+});
+
