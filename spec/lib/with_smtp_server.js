@@ -10,7 +10,6 @@ function withSmtpServer(callbackObj) {
 
     let closing = false;
     function onListen () {
-        console.log("SMTP: ready...");
         // console.log("DEBUG onListen callback");
         if (callbackObj.onListen) {
             callbackObj.onListen();
@@ -28,7 +27,6 @@ function withSmtpServer(callbackObj) {
         if (closing) return;
 
         closing = true;
-        console.log("SMTP: closing...");
         // console.log("DEBUG onClose callback");
         if (callbackObj.onClose) {
             callbackObj.onClose();

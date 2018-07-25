@@ -38,8 +38,8 @@ describe('Forms API', () => {
                 onListen: (_server) => {
                     request.post(
                         { url, formData },
-                        (error, response, _body) => {
-                            console.log(error);
+                        (_error, response, _body) => {
+                            // console.log(error);
                             assert.strictEqual(response.statusCode, 200);
                         }
                     );
@@ -183,9 +183,9 @@ describe('Forms API', () => {
                 onListen: () => {
                     request.post(
                         { url, formData },
-                        (error, _response, body) => {
-                            console.log(error);
-                            console.log(body);
+                        (_error, _response, body) => {
+                            // console.log(error);
+                            // console.log(body);
                             assert.include(body, 'Success');
                         }
                     );
