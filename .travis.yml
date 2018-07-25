@@ -13,6 +13,4 @@ env:
   - NODE_ENV=test
 
 script: 
-  - npm run watch &
-  - sleep 2s
-  - npm run spec
+  - npm test
