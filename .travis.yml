@@ -15,8 +15,3 @@ env:
 script: 
   - npm test
 
-addons:
-  apt:
-    packages:
-    - libsqlite3-dev
-    - zlib1g-dev
