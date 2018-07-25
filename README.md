@@ -1,12 +1,12 @@
 
 # Maily Form
 
+![Travis](https://travis-ci.org/glenux/contrib-maily-form.svg?branch=master) | [DockerHub](https://hub.docker.com/r/jlelse/maily-form/)
+
 This is a self-hosted service you can use to place forms on static sites. It uses [nodemailer](https://nodemailer.com/about/) and you can host it with Docker. 
 
 
-[DockerHub](https://hub.docker.com/r/jlelse/maily-form/)
-
-*It is currently in development and it's not advised to use in production yet.*
+:warning: __It is currently in development and it's not advised to use in production yet.__
 
 ## Server parameters
 
