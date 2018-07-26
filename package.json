@@ -4,8 +4,8 @@
   "description": "Forms to Email",
   "main": "index.js",
   "scripts": {
-    "start": "node .",
-    "watch": "NODE_ENV=test && nodemon .",
+    "start": "NODE_ENV=production node bin/www",
+    "watch": "NODE_ENV=development && nodemon -w app bin/www",
     "test": "NODE_ENV=test mocha --reporter spec spec/**/*_spec.js",
     "watch-spec": "NODE_ENV=test mocha --watch --recursive --reporter spec spec/**/*_spec.js"
   },
