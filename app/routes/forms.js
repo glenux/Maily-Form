@@ -9,7 +9,12 @@ var router = express.Router();
 
 router.post('/', (req, res) => processFormFields(req, res));
 
-// Process Form Fields
+/*
+ * Process form fields
+ *
+ * TODO: move response in another functions
+ * TODO: validate input format to prevent injections
+ */
 function processFormFields(req, res) {
     let text = '';
     let to = config.emailTo;
