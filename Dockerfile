@@ -1,6 +1,8 @@
-FROM mhart/alpine-node:9
-LABEL maintainer="jlelse (https://about.jlelse.de)"
+FROM node:10-alpine
+MAINTAINER Jan-Lukas Else (https://about.jlelse.de)
+
 COPY . /app
 WORKDIR /app
-RUN npm i
-CMD ["node", "."]
+
+RUN npm install
+CMD ["npm", "start"]
