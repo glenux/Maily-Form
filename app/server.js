@@ -2,6 +2,7 @@
 const path = require('path');
 const cors = require('cors');
 const express = require('express');
+const errorhandler = require('errorhandler')
 
 const rootDir = path.join(__dirname, '..');
 const adminRouter = require(path.join(rootDir, '/app/routes/admin'));
@@ -19,9 +20,9 @@ app.use(cors({origin: config.accessControlAllowOrigin }));
 app.use(express.static(path.join(rootDir, '/public')));
 
 if (process.env.NODE_ENV === 'development') {
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+  app.use(errorhandler({ dumpExceptions: true, showStack: true }));
 } else if (process.env.NODE_ENV === 'production') {
-  app.use(express.errorHandler());
+  app.use(errorhandler());
 }
 
 // Attach routes
