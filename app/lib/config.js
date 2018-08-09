@@ -29,7 +29,6 @@ if (process.env.NODE_ENV === 'production') {
 
         subjectSuccess: process.env.SUBJECT_SUCCESS || 'New submission from __FORM_NAME__',
         subjectError: process.env.SUBJECT_ERROR || 'Error in submission from __FORM_NAME__',
-
         // Allowed recipients
         allowedTo: process.env.ALLOWED_TO || false,
 
@@ -75,6 +74,9 @@ if (process.env.NODE_ENV === 'production') {
 
         // Response format (accepts 'json' or 'html')
         responseFormat: 'html',
+       
+        // Allowed recipients
+        allowedTo: false,
 
         // Security (or lack-of)
         corsHeader: '*',
