@@ -19,6 +19,7 @@ CMD ["npm", "start"]
 # STAGE 2
 # - Keep Only runtime libraries: no build tool is allowed in production.
 #
+ENV PORT
 FROM node:10-alpine
 MAINTAINER Jan-Lukas Else (https://about.jlelse.de)
 
@@ -28,6 +29,7 @@ WORKDIR /app
 RUN apk add --update sqlite-libs \
     && rm -rf /var/cache/apk/*
 
+EXPOSE $PORT
 RUN npm install
 CMD ["npm", "start"]
 
